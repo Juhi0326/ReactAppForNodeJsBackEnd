@@ -1,5 +1,5 @@
 import React from 'react'
-import probaApi from '../services/probaApi';
+import productService from '../services/productService';
 import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { toastShow } from '../store/actions'
@@ -32,7 +32,7 @@ export const Other = () => {
   const handleProducts = async () => {
     setLoading(true);
     try {
-      const result = await probaApi.getProducts();
+      const result = await productService.getProducts();
       setProducts(result.data.products);
     } catch (err) {
       setError(err.message || "Unexpected Error!");

@@ -1,19 +1,32 @@
-import { Button, Row, Col, Stack } from 'react-bootstrap';
+import { Row, Col, Stack } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import homePageService from '../services/homePageService';
 import { toastShow} from '../store/actions'
 import CustomButton from '../components/CustomButton'
-import { useState } from 'react'
+import { useState, useEffect, } from 'react'
 import authService from '../services/authService';
 
 const Home = () => {
 
     const isLogged = useSelector(state => state.loggedIn);
     const dispatch = useDispatch();
-    const [title, setTitle] = useState('Juhi Webalkalmazása');
-    const titleChange = (newTitle) => {
-        setTitle(newTitle);
-    }
-    const handleClick = (event) => {
+    const [title, setTitle] = useState();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const getTitle = async () => {
+        setLoading(true);
+        try {
+          const result = await homePageService.getHomePage();
+          setTitle(result.data.HomePage[0].Title.titleDescription)
+          console.log(result.data.HomePage[0].Title.titleDescription
+            )
+        } catch (err) {
+          setError(err.message || "Unexpected Error!");
+        } finally {
+          setLoading(false);
+        }
+      };
+/*     const handleClick = (event) => {
         event.preventDefault();
         const user = {
             userName: 'Anna',
@@ -30,68 +43,22 @@ const Home = () => {
             console.log(err)
             dispatch(toastShow('Sikertelen regisztáció', 'danger'))
           });
-    }
-
-/*     const login = (event) => {
-        event.preventDefault();
-        const user = {
-            email: 'juhi0326@gmail.com',
-            password: 'Juhi1234*',
-        }
-        authService.login(user)
-        .then((response) => {
-            console.log(response)
-          })
-          .catch((err) => {
-            console.log(err)
-          });
     } */
-/*     const loginForRedux = (event) => {
-        event.preventDefault();
-        const user = {
-            email: 'juhi0326@gmail.com',
-            password: 'Juhi1234*',
-        }
-        authService.login(user)
-        .then((response) => {
-            console.log(response)
-            const loggedUser = {
-                userName: response.userName,
-                userId: response.userId,
-                role: response.role,
-                email: response.useemailrName,
-                accessToken: response.accessToken,
-            }
-            dispatch(signIn2(loggedUser))
 
-          })
-          .catch((err) => {
-            console.log(err)
-            dispatch(toastShow('Sikertelen bejelentkezés! részletes hibaüzenet: '+ err, 'danger'))
-          });
-    } */
-    
+    useEffect(() => {
+        getTitle();
+      }, []);
+
+
     return (
         <div>
             <Stack gap={5}>
                 <Row className="justify-content-md-center">
-                    {title}
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <Button variant="dark" onClick={() => {
-                            titleChange('Ez az új cím');
-                        }}>Change Title</Button>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <CustomButton onClick={handleClick} value='proba regisztráció' />
-                    </Col>
+                {loading ? <p>Home page is loading!</p> :<p>{title}</p>}
                 </Row>
 
-                {isLogged ? <h3> secret text</h3> : ''
-                }
+                {isLogged ? <h3> secret text</h3> : ''}
+                {error && <p>{error}</p>}
 
 
             </Stack>
