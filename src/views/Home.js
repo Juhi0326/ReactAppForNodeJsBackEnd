@@ -1,14 +1,12 @@
 import { Button, Row, Col, Stack } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, toastShow, signIn2} from '../store/actions'
+import { toastShow} from '../store/actions'
 import CustomButton from '../components/CustomButton'
-import MUI_Button from '../components/CustomButton'
 import { useState } from 'react'
 import authService from '../services/authService';
 
 const Home = () => {
 
-    const counter = useSelector(state => state.counter);
     const isLogged = useSelector(state => state.loggedIn);
     const dispatch = useDispatch();
     const [title, setTitle] = useState('Juhi Webalkalmazása');
@@ -34,7 +32,7 @@ const Home = () => {
           });
     }
 
-    const login = (event) => {
+/*     const login = (event) => {
         event.preventDefault();
         const user = {
             email: 'juhi0326@gmail.com',
@@ -47,8 +45,8 @@ const Home = () => {
           .catch((err) => {
             console.log(err)
           });
-    }
-    const loginForRedux = (event) => {
+    } */
+/*     const loginForRedux = (event) => {
         event.preventDefault();
         const user = {
             email: 'juhi0326@gmail.com',
@@ -71,16 +69,13 @@ const Home = () => {
             console.log(err)
             dispatch(toastShow('Sikertelen bejelentkezés! részletes hibaüzenet: '+ err, 'danger'))
           });
-    }
+    } */
     
     return (
         <div>
             <Stack gap={5}>
                 <Row className="justify-content-md-center">
                     {title}
-                </Row>
-                <Row className="justify-content-md-center">
-                    counter: {counter}
                 </Row>
                 <Row className="justify-content-md-center">
                     <Col md="auto">
@@ -91,37 +86,9 @@ const Home = () => {
                 </Row>
                 <Row className="justify-content-md-center">
                     <Col md="auto">
-                        <Button variant="dark" onClick={() => {
-                            dispatch(increment());
-                        }}>+</Button>
-                    </Col>
-                    <Col md="auto">
-                        <Button variant="dark" onClick={() => {
-                            dispatch(decrement());
-                        }}>-</Button>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
                         <CustomButton onClick={handleClick} value='proba regisztráció' />
                     </Col>
                 </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <CustomButton onClick={login} value='proba login' />
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <CustomButton onClick={loginForRedux} value='reduxos login' />
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <MUI_Button onClick={loginForRedux} value='reduxos login with matarial ui' />
-                    </Col>
-                </Row>
-
 
                 {isLogged ? <h3> secret text</h3> : ''
                 }

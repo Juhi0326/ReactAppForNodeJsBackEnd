@@ -1,14 +1,3 @@
-export const increment = ()=> {
-    return {
-        type: 'INCREMENT'
-    }
-}
-
-export const decrement = ()=> {
-    return {
-        type: 'DECREMENT'
-    }
-}
 
 export const signIn2 = (payload)=> {
     return {
@@ -16,17 +5,7 @@ export const signIn2 = (payload)=> {
         payload
     }
 }
-export const signIn = ()=> {
-    return {
-        type: 'SIGN_IN'
-    }
-}
 
-export const signOut = ()=> {
-    return {
-        type: 'SIGN_OUT'
-    }
-}
 export const signOut2 = ()=> {
     return {
         type: 'SIGN_OUT2'

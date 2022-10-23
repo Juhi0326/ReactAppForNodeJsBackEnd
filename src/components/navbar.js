@@ -2,45 +2,19 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from "react-router-dom";
-import {signIn2, signOut2, toastShow} from '../store/actions'
+import { Link, useNavigate } from "react-router-dom";
+import {signOut2, toastShow} from '../store/actions'
 import authService from '../services/authService';
 
 function NavBar() {
+    const navigate = useNavigate()
     const isLogged = useSelector(state => state.user.state);
     const dispatch = useDispatch();
 
-    const handleLogStatus= () => {
-        if (!isLogged) {
-            const user = {
-                email: 'juhi0326@gmail.com',
-                password: 'Juhi1234*',
-            }
-            authService.login(user)
-            .then((response) => {
-                console.log(response)
-                const loggedUser = {
-                    userName: response.userName,
-                    userId: response.userId,
-                    role: response.role,
-                    email: response.useemailrName,
-                    accessToken: response.accessToken,
-                }
-                dispatch(signIn2(loggedUser))
-                dispatch(toastShow(`Sikeres bejelentkezés, ${loggedUser.userName}, légy üdvözölve! :) `, 'success'))
-    
-              })
-              .catch((err) => {
-                console.log(err)
-                dispatch(toastShow('Sikertelen bejelentkezés! részletes hibaüzenet: '+ err, 'danger'))
-              });
-        } else {
+    const logOut= () => {
             authService.logout();
             dispatch(signOut2());
             dispatch(toastShow(` sikeres kijelentkezés!`, 'success'))
-        }
-        
-
     }
     return (
         <div>
@@ -57,7 +31,8 @@ function NavBar() {
                         </Nav.Link>
                     </Nav>
                     <Nav className="justify-content-end">
-                    <Nav.Link className="me-auto" onClick={()=> handleLogStatus()}>
+                    <Nav.Link className="me-auto" onClick={()=> 
+                        isLogged ? logOut() : navigate('/login')}>
                           {isLogged ? 'Sign Out' : 'Sign In'}
                     </Nav.Link>
                     </Nav>
